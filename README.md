@@ -62,27 +62,28 @@ My_Airbnb
 ---
 ### AUTHORS:
 <details>
+    <summary>Phadima Maredi</summary>
+    <ul>
+        <li>
+            <a href="https://github.com/Prof-Percival">GitHub</a>
+        </li>
+        <li>
+            <a href="mailto:percival.mrd921@yahoo.com" title="Phadima Email Address">Email Phadima</a>
+        </li>
+    </ul>
+  </details>
+  
+<details>
     <summary>GEOFFREY ONYANGO ODUOR</summary>
     <ul>
         <li>
-            <a href="https://github.com/luckyhope1">Github</a>
+            <a href="https://github.com/luckyhope1">GitHub</a>
         </li>
         <li>
             <a href="https://twitter.com/TomGeoffry">Twitter</a>
         </li>
         <li>
-            <a href="https://geoffrytom@gmail.com">e-mail</a>
-        </li>
-    </ul>
-  </details>
-<details>
-    <summary>Phadima Maredi</summary>
-    <ul>
-        <li>
-            <a href="https://github.com/Prof-Percival">Github</a>
-        </li>
-        <li>
-            <a href="percival.mrd921@yahoo.com">e-mail</a>
+            <a href="mailto:geoffrytom@gmail.com" title="Geoffrey Email Address">Email Geoffrey</a>
         </li>
     </ul>
   </details>
