@@ -20,52 +20,52 @@ class HBNBCommand(cmd.Cmd):
     """A HBNBCommand class"""
     prompt = '(hbnb) '
 
-    def __class_validity(self, args):
+    def __class_validity(self, arguments):
 
-        args = re.split(r" (?![^{}[\]()]*[}\]])", args)
-        if len(args) == 0:
+        arguments = re.split(r" (?![^{}[\]()]*[}\]])", arguments)
+        if len(arguments) == 0:
             print("** class name missing **")
             return None
 
-        if args[0] not in globals().keys():
+        if arguments[0] not in globals().keys():
             print("** class doesn't exist **")
             return None
 
-        return args
+        return arguments
 
-    def __func(self, commmand, args):
+    def __func(self, cmd_text, arguments):
 
-        args = self.__class_validity(args)
-        if args is None:
+        arguments = self.__class_validity(arguments)
+        if arguments is None:
             return
 
-        if len(args) < 2:
+        if len(arguments) < 2:
             print("** instance id missing **")
             return
 
         storage.reload()
         objects = storage.all()
-        key = args[0] + '.' + args[1]
+        key = arguments[0] + '.' + arguments[1]
 
         if key not in objects.keys():
             print("** no instance found **")
-        elif commmand == "destroy":
+        elif cmd_text == "destroy":
             del objects[key]
             storage.save()
         else:
             print(objects[key])
 
     def __parse(self, arg_str):
-        parsed_arg = re.split(r"\(|, (?![^{}[\]()]*[}\]])", arg_str[:-1])
-        return parsed_arg
+        parsed_argument = re.split(r"\(|, (?![^{}[\]()]*[}\]])", arg_str[:-1])
+        return parsed_argument
 
     def __get_instances(self, objects, classname):
-        objects_arr = []
+        objects_array = []
         for key in objects.keys():
             class_type = key.split('.')[0]
             if class_type == classname:
-                objects_arr.append(str(objects[key]))
-        return objects_arr
+                objects_array.append(str(objects[key]))
+        return objects_array
 
     def do_quit(self, arg):
         'Quit command to exit the program'
@@ -75,100 +75,100 @@ class HBNBCommand(cmd.Cmd):
         'EOF command to exit the program'
         return True
 
-    def do_create(self, args):
+    def do_create(self, arguments):
         'Creates a new Instance of a class'
-        args = self.__class_validity(args)
-        if args is None:
+        arguments = self.__class_validity(arguments)
+        if arguments is None:
             return
-        obj = globals()[args[0]]()
+        obj = globals()[arguments[0]]()
         print(obj.id)
 
-    def do_show(self, args):
+    def do_show(self, arguments):
         'Prints the string repr of an instance based on the class name and id'
-        self.__func("show", args)
+        self.__func("show", arguments)
 
-    def do_destroy(self, args):
+    def do_destroy(self, arguments):
         'Deletes an instance based on the class name and id'
-        self.__func("destroy", args)
+        self.__func("destroy", arguments)
 
-    def do_count(self, args):
+    def do_count(self, arguments):
         'Retrieves the number of instances of a class'
-        args = self.__class_validity(args)
-        if args is None:
+        arguments = self.__class_validity(arguments)
+        if arguments is None:
             return
         storage.reload()
         objects = storage.all()
-        print(len(self.__get_instances(objects, args[0])))
+        print(len(self.__get_instances(objects, arguments[0])))
 
-    def do_all(self, args):
+    def do_all(self, arguments):
         """
         Prints all string repr of all instances based on the class name
         """
-        args_count = len(shlex.split(args))
+        arguments_count = len(shlex.split(arguments))
 
         storage.reload()
         objects = storage.all()
         objects_arr = []
 
-        if args_count < 1:
+        if arguments_count < 1:
             for value in objects.values():
                 objects_arr.append(str(value))
         else:
-            args = self.__class_validity(args)
-            if args is None:
+            arguments = self.__class_validity(arguments)
+            if arguments is None:
                 return
             else:
-                objects_arr = self.__get_instances(objects, args[0])
+                objects_arr = self.__get_instances(objects, arguments[0])
 
         print(objects_arr)
 
-    def do_update(self, args):
+    def do_update(self, arguments):
         """Updates an instance based on the class name and id"""
-        args = self.__class_validity(args)
-        if args is None:
+        arguments = self.__class_validity(arguments)
+        if arguments is None:
             return
-        elif len(args) < 2:
+        elif len(arguments) < 2:
             print("** instance id missing **")
             return
 
         storage.reload()
         objects = storage.all()
-        key = args[0] + '.' + args[1]
+        key = arguments[0] + '.' + arguments[1]
 
         if key not in objects.keys():
             print("** no instance found **")
             return
-        elif len(args) < 3:
+        elif len(arguments) < 3:
             print("** attribute name missing **")
             return
-        elif '}' in args[2]:
-            for key, value in eval(args[2]).items():
-                argument = f"{args[0]} {args[1]} {key} {value}"
+        elif '}' in arguments[2]:
+            for key, value in eval(arguments[2]).items():
+                argument = f"{arguments[0]} {arguments[1]} {key} {value}"
                 self.do_update(argument)
             return
-        elif len(args) < 4:
+        elif len(arguments) < 4:
             print("** value missing **")
             return
         else:
             obj = vars(objects[key])
-            attr = args[2]
-            value = args[3]
+            attr = arguments[2]
+            value = arguments[3]
             if attr in obj.keys():
                 attr_type = type(obj[attr])
-                value = attr_type(args[3])
+                value = attr_type(arguments[3])
             obj[attr] = value
             objects[key].save()
 
-    def precmd(self, args):
-        if "." in args:
-            args = args.split('.', 1)
-            classname = args[0]
-            arguments = self.__parse(args[1])
+    def precmd(self, arguments):
+        if "." in arguments:
+            arguments = arguments.split('.', 1)
+            classname = arguments[0]
+            arguments = self.__parse(arguments[1])
             function = arguments[0]
             line = f"{function} {classname} {(' ').join(arguments[1:])}"
             return cmd.Cmd.precmd(self, line)
         else:
-            return cmd.Cmd.precmd(self, args)
+            return cmd.Cmd.precmd(self, arguments)
         return
 
     def emptyline(self):
